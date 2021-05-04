@@ -1,6 +1,6 @@
 require 'oystercard'
 
-describe Oystercard do 
+describe OysterCard do 
     it 'has a balance' do 
         expect(subject.balance).to eq 0
     end
@@ -13,6 +13,15 @@ describe Oystercard do
 
     it 'increments the balance by given amount' do
       expect { subject.top_up(50) }.to change {subject.balance}.by(50)
+    end
+  end
+
+  describe '#deduct' do
+    it { is_expected.to respond_to(:deduct).with(1).argument }
+
+    it 'deducts a specified amount from the balance' do
+      subject.top_up(50)
+      expect(subject.deduct(20)).to eq (30)
     end
   end 
 end
