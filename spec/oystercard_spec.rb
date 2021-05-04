@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe OysterCard do 
+
     it 'has a balance' do 
         expect(subject.balance).to eq 0
     end
@@ -22,6 +23,12 @@ describe OysterCard do
     it 'deducts a specified amount from the balance' do
       subject.top_up(50)
       expect(subject.deduct(20)).to eq (30)
+    end
+    
+    it 'raises an error if balance exceeds maximum' do
+
+        subject.top_up(50)
+        expect { subject.top_up(45) }.to raise_error "Exceeds maximum balance of #{described_class::MAX_BALANCE}"
     end
   end 
 end
