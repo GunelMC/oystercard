@@ -31,4 +31,20 @@ describe OysterCard do
         expect { subject.top_up(45) }.to raise_error "Exceeds maximum balance of #{described_class::MAX_BALANCE}"
     end
   end 
+
+    it 'is in journey' do
+      subject.touch_in
+      expect(subject.in_journey?).to eq(true)
+    end 
+
+    it 'can touch in' do
+      subject.touch_in
+      expect(subject).to be_in_journey
+    end
+
+    it 'can touch out' do
+      subject.touch_in
+      subject.touch_out
+      expect(subject).not_to be_in_journey
+    end 
 end
