@@ -1,8 +1,8 @@
 require 'oystercard'
 
 describe OysterCard do
-  let(:entry_station) { double :station, :name => 'Stratford' }
-  let(:exit_station) { double :station, :name => 'Maida Vale' }
+  let(:entry_station) { double :station }
+  let(:exit_station) { double :station }
   let(:journey) { {entry: entry_station, exit: exit_station} }
 
     it 'stores the entry station' do
