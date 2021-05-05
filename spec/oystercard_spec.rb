@@ -16,21 +16,12 @@ describe OysterCard do
       expect { subject.top_up(50) }.to change {subject.balance}.by(50)
     end
   end
-
-  describe '#deduct' do
-    it { is_expected.to respond_to(:deduct).with(1).argument }
-
-    it 'deducts a specified amount from the balance' do
-      subject.top_up(50)
-      expect(subject.deduct(20)).to eq (30)
-    end
     
     it 'raises an error if balance exceeds maximum' do
 
         subject.top_up(50)
         expect { subject.top_up(45) }.to raise_error "Exceeds maximum balance of #{described_class::MAX_BALANCE}"
     end
-  end 
 
     it 'is in journey' do
       subject.top_up(10)
@@ -48,10 +39,20 @@ describe OysterCard do
       expect { subject.touch_in }.to raise_error('You need to top up')
     end
 
-    it 'can touch out' do
-      subject.top_up(10)
-      subject.touch_in
-      subject.touch_out
-      expect(subject).not_to be_in_journey
-    end 
-end
+    describe '#touch_out' do 
+
+      it 'can touch out' do
+        subject.top_up(10)
+        subject.touch_in
+        subject.touch_out
+        expect(subject).not_to be_in_journey
+      end
+
+      it 'deducts the minimum fare from the card' do
+        subject.top_up(10)
+        subject.touch_in
+        subject.touch_out
+        expect(subject.balance).to eq(9)
+      end
+  end
+end 
