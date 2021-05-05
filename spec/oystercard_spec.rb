@@ -2,11 +2,25 @@ require 'oystercard'
 
 describe OysterCard do
   let(:entry_station) { double :station, :name => 'Stratford' }
+  let(:exit_station) { double :station, :name => 'Maida Vale' }
+  let(:journey) { {entry: entry_station, exit: exit_station} }
 
     it 'stores the entry station' do
       subject.top_up(10)
       subject.touch_in(entry_station)
       expect(subject.entry_station).to eq(entry_station)
+    end
+
+    it 'has an empty list of journeys by default' do
+      expect(subject.journeys).to eq([])
+    end 
+
+
+     it 'creates one journey after a touch in and touch out' do
+      subject.top_up(10)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journeys).to include journey
     end 
 
     it 'has a balance' do 
@@ -25,22 +39,20 @@ describe OysterCard do
   end
     
     it 'raises an error if balance exceeds maximum' do
-
-        subject.top_up(50)
-        expect { subject.top_up(45) }.to raise_error "Exceeds maximum balance of #{described_class::MAX_BALANCE}"
+      subject.top_up(50)
+      expect { subject.top_up(45) }.to raise_error "Exceeds maximum balance of #{described_class::MAX_BALANCE}"
     end
 
     it 'is in journey' do
       subject.top_up(10)
       subject.touch_in(entry_station)
-      p subject.in_journey?
       expect(subject.in_journey?).to eq(true)
     end 
 
     it 'can touch in' do
       subject.top_up(10)
       subject.touch_in(entry_station)
-      expect(subject).to be_in_journey
+      expect(subject.in_journey?).to eq(true)
     end
 
     it 'raises an error when touching in with balance below minimum fare' do
@@ -52,15 +64,13 @@ describe OysterCard do
       it 'can touch out' do
         subject.top_up(10)
         subject.touch_in(entry_station)
-        subject.touch_out
-        expect(subject).not_to be_in_journey
+        subject.touch_out(exit_station)
+        expect(subject.in_journey?).to eq(false)
       end
 
       it 'deducts the minimum fare from the card' do
         subject.top_up(10)
-        subject.touch_in(entry_station)
-        subject.touch_out
-        expect(subject.balance).to eq(9)
+        expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by(-OysterCard::MINIMUM_FARE)
       end
   end
 end 
