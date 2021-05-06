@@ -46,13 +46,13 @@ describe OysterCard do
     it 'is in journey' do
       subject.top_up(10)
       subject.touch_in(entry_station)
-      expect(subject.in_journey?).to eq(true)
+      expect(subject).to be_in_journey
     end 
 
     it 'can touch in' do
       subject.top_up(10)
       subject.touch_in(entry_station)
-      expect(subject.in_journey?).to eq(true)
+      expect(subject).to be_in_journey
     end
 
     it 'raises an error when touching in with balance below minimum fare' do
@@ -65,7 +65,7 @@ describe OysterCard do
         subject.top_up(10)
         subject.touch_in(entry_station)
         subject.touch_out(exit_station)
-        expect(subject.in_journey?).to eq(false)
+        expect(subject).not_to be_in_journey
       end
 
       it 'deducts the minimum fare from the card' do

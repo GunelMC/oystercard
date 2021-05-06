@@ -23,7 +23,6 @@ class OysterCard
     fail 'You need to top up' if @balance < MINIMUM_FARE
 
     @entry_station = entry_station
-    @in_journey = true
   end 
 
   def touch_out(exit_station)
