@@ -16,7 +16,7 @@ describe OysterCard do
     end 
 
 
-     it 'creates one journey after a touch in and touch out' do
+    it 'creates one journey after a touch in and touch out' do
       subject.top_up(10)
       subject.touch_in(entry_station)
       subject.touch_out(exit_station)
